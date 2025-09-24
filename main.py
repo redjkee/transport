@@ -5,33 +5,19 @@ from pathlib import Path
 from datetime import datetime
 import os
 
-def detect_month_from_files(files):
-    """Автоматически определяет месяц из названий файлов"""
+def get_current_month():
+    """Возвращает текущий месяц на русском"""
     month_names = {
         '01': 'январь', '02': 'февраль', '03': 'март', '04': 'апрель',
         '05': 'май', '06': 'июнь', '07': 'июль', '08': 'август',
         '09': 'сентябрь', '10': 'октябрь', '11': 'ноябрь', '12': 'декабрь'
     }
     
-    # Пробуем найти месяц в названиях файлов
-    for file_path in files:
-        filename = file_path.name.lower()
-        
-        # Ищем русские названия месяцев
-        for month_num, month_name in month_names.items():
-            if month_name in filename:
-                return month_name
-        
-        # Ищем числовое представление месяца
-        month_match = re.search(r'(\d{2})\.?xlsx', filename)
-        if month_match:
-            month_num = month_match.group(1)
-            if month_num in month_names:
-                return month_names[month_num]
-    
-    # Если месяц не найден в файлах, используем текущий
     current_month = datetime.now().month
-    return month_names.get(str(current_month).zfill(2), "текущий_месяц")
+    month_name = month_names.get(str(current_month).zfill(2))
+    
+    print(f"📅 Используется месяц: {month_name}")
+    return month_name
 
 def find_table_structure(ws):
     """Находит структуру таблицы по ключевым заголовкам"""
@@ -289,7 +275,7 @@ def main():
         return
     
     # Автоматически определяем месяц
-    month_name = detect_month_from_files(files)
+    month_name = get_current_month()
     print(f"📅 Автоматически определен месяц: {month_name}")
     
     # Собираем все данные
